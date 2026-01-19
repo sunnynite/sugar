@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Price Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .calculator {
+            padding: 20px;
+        }
+        .instructions {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+        .input-group h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        label {
+            flex: 1;
+            font-weight: 500;
+            color: #34495e;
+        }
+        input {
+            flex: 2;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 20px 0;
+        }
+        .calculate-btn:hover {
+            background: #27ae60;
+        }
+        .result-container {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .result-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: #2ecc71;
+        }
+        .result-detail {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+        .explanation h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .steps {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .steps h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+        }
+        @media (max-width: 480px) {
+            .input-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            label {
+                margin-bottom: 5px;
+            }
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sugar Price Calculator</h1>
+            <p class="subtitle">Calculate sugar price premiums based on market data</p>
+        </header>
+        
+        <div class="calculator">
+            <div class="instructions">
+                <h3>How to Use:</h3>
+                <p>Enter the required values in the input fields below and click "Calculate Cash Premium" to see the result.</p>
+            </div>
+            
+            <div class="input-group">
+                <h3>Input Values</h3>
+                <div class="input-row">
+                    <label for="nyPrice">NY No. 11 (cents/lb):</label>
+                    <input type="number" id="nyPrice" value="17" step="0.01">
+                </div>
+                <div class="input-row">
+                    <label for="fobCash">FOB Cash (cents/lb):</label>
+                    <input type="number" id="fobCash" value="0.2" step="0.01">
+                </div>
+                <div class="input-row">
+                    <label for="freight">Freight (USD/mt):</label>
+                    <input type="number" id="freight" value="39" step="0.01">
+                </div>
+                <div class="input-row">
+                    <label for="cost">Cost (USD/mt):</label>
+                    <input type="number" id="cost" value="2" step="0.01">
+                </div>
+            </div>
+            
+            <button class="calculate-btn" onclick="calculatePrice()">Calculate Cash Premium</button>
+            
+            <div class="result-container">
+                <div class="result-title">Cash Premium (USD/mt)</div>
+                <div class="result-value" id="result">61.34</div>
+                <div class="result-detail">Based on current inputs and conversion factor</div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>About This Calculator</h3>
+            <p>This calculator determines the cash premium for sugar based on:</p>
+            <ul>
+                <li>NY No. 11 futures price (cents/lb)</li>
+                <li>FOB Cash premium (cents/lb)</li>
+                <li>Freight costs (USD/mt)</li>
+                <li>Other costs (USD/mt)</li>
+                <li>Fixed conversion factor: 22.0462 (converting cents/lb to USD/mt)</li>
+            </ul>
+            <p>The calculation follows the same logic as the Excel sheet, computing the CNF price and subtracting the converted futures price.</p>
+        </div>
+    </div>
+
+    <div class="steps">
+        <h2>How to Run This Calculator</h2>
+        
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Save this page</strong>
+                <p>Press and hold anywhere on this page and select "Save to Files" to save it to your iPhone.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Open the file</strong>
+                <p>Go to the Files app on your iPhone, find the saved HTML file, and tap on it to open in your browser.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Use the calculator</strong>
+                <p>Enter your values and tap "Calculate Cash Premium" to see the result.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Alternative method</strong>
+                <p>You can also copy the entire code, paste it into a new text file, save with .html extension, and open it.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            // Get input values
+            const nyPrice = parseFloat(document.getElementById('nyPrice').value);
+            const fobCash = parseFloat(document.getElementById('fobCash').value);
+            const freight = parseFloat(document.getElementById('freight').value);
+            const cost = parseFloat(document.getElementById('cost').value);
+            
+            // Fixed values from the Excel sheet
+            const converter = 22.0462;
+            const polPremium = 0.042;
+            
+            // Perform calculations
+            const d4 = nyPrice * converter;
+            const c6 = fobCash + nyPrice;
+            const d6 = c6 * converter;
+            const d7 = d6 * polPremium;
+            const d8 = freight;
+            const d9 = cost;
+            const d10 = d9 + d8 + d7 + d6;
+            const d11 = d10 - d4;
+            
+            // Display result
+            document.getElementById('result').textContent = d11.toFixed(2);
+        }
+        
+        // Initialize calculation on page load
+        window.onload = calculatePrice;
+    </script>
+</body>
+</html>
